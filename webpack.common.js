@@ -23,12 +23,10 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
-      /*
       {
         test: /\.html$/i,
         loader: "html-loader",
       },
-      */
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
         type: "asset/resource",
@@ -36,7 +34,6 @@ module.exports = {
           filename: "images/[name][ext][query]",
         },
       },
-
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: "asset/resource",
@@ -52,13 +49,11 @@ module.exports = {
           filename: "icons/[name][ext][query]",
         },
       },
-      /*
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: "babel-loader",
       },
-      */
     ],
   },
 };
