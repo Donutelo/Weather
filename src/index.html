@@ -1,11 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>abc</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
+  </head>
+  <body>
+    <header>
+      <search>
+        <form role="search" id="searchForm">
+          <div id="searchContent">
+            <label for="searchInput" class="visually-hidden">Search</label>
+            <div id="searchBox">
+              <svg viewBox="0 0 24 24" width="20" height="20" id="searchIcon">
+                <path
+                  d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                />
+              </svg>
+              <input
+                type="search"
+                id="searchInput"
+                placeholder="Name a place"
+              />
+            </div>
+          </div>
+        </form>
+      </search>
+    </header>
+    <main id="main-content">
+      <section
+        aria-labelledby="weather-handling"
+        class="weather-handling"
+        aria-live="polite"
+      >
+        <h2 id="results-title" class="visually-hidden">
+          Weather forecast results
+        </h2>
+
+        <ul class="results-grid">
+          <li>
+            <article class="weather-card" aria-label="">
+              <!-- don't forget to put something (the place's name) in the aria-label -->
+              <h3>teste</h3>
+              <div class="weather-icon-wrapper" role="img">
+                <svg aria-hidden="true" focusable="false">
+                  <!-- remenber to put something here -->
+                </svg>
+              </div>
+              <div class="weather-content">
+                <h3 class="city-name"></h3>
+                <p class="temperature"></p>
+                <p class="condition"></p>
+                <dl class="weather-detais">
+                  <dt>Humidity:</dt>
+                  <dd id="humidity"></dd>
+                  <dt>Wind:</dt>
+                  <dd id="wind-speed"></dd>
+                  <dt>Feels-like temp:</dt>
+                  <dd id="wind-speed"></dd>
+                </dl>
+              </div>
+            </article>
+          </li>
+          <li>
+            <div class="carousel" role="group" aria-label="Next days forecast">
+              <ul class="caroulsel-track">
+                <li><!-- day one card --></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <scprit src="index.js"></scprit>
+  </body>
 </html>
