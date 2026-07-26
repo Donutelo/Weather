@@ -14,6 +14,7 @@ module.exports = merge(common, {
     host: "0.0.0.0",
     hot: true,
     allowedHosts: "all",
+    historyApiFallback: true,
     client: {
       webSocketURL: {
         hostname: hostname,

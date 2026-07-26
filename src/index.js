@@ -1,5 +1,7 @@
 import "./style.css";
+import { app } from './server.js';
 
+app.listen(3000);
 const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
 const Today = new Date().toISOString().split('T'[0]);
 
@@ -25,14 +27,24 @@ async function GetWeatherInfo(
     ).then(r => r.json());
     return data;
   } catch (error) {
-    console.err('Erro:', error.message);
+    console.error('Erro:', error.message);
     return null;
   }
 }
 
 searchInput.addEventListener('input', async () => {
+  try {
   const term = searchInput.value.toLowerCase();
-  const data = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&limit=5`).then(r => r.json());
+  const url = `https://corsproxy.io/?${encodeURIComponent('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(term))}`;
+  const data = await fetch(url, {
+    headers: {
+      'User-Agent': 'Weather/1.0 gustavobm2049@hotmail.com'
+    }
+  }) /*.then(r => r.json());*/
+  const text = await data.text();
   const itens = data.map(place => `<li>${place.name}</li>`).join('');
   list.innerHTML = itens;
+  } catch (error) {
+    console.error('Erro:', error.message);
+  }
 })
