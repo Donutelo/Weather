@@ -1,13 +1,18 @@
-/*const express = require("express");
-const cors = require("cors");
-const axios = require("axios");*/
-
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 
-export const app = express();
-app.use(cors());
+const app = express();
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204); // Responde rapidamente à verificação CORS
+  }
+  next();
+});
 
 app.get("/api/nomination", async (req, res) => {
   try {
@@ -22,8 +27,8 @@ app.get("/api/nomination", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status.json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(3000, () => console.log('Proxy rodando em http://localhost:3000'));
+app.listen(3000, '0.0.0.0', () => console.log('Proxy rodando em http://localhost:3000'));

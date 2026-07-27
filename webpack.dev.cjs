@@ -1,6 +1,6 @@
 // webpack.dev.js
 const { merge } = require("webpack-merge");
-const common = require("./webpack.common.js");
+const common = require("./webpack.common.cjs");
 
 const hostname = process.env.CODESPACE_NAME
   ? `${process.env.CODESPACE_NAME}-8080.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`
@@ -32,5 +32,13 @@ module.exports = merge(common, {
         interval: 300,
       },
     },
+
+    proxy: [
+      {
+        context: ["/api"],
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    ],
   },
 });
