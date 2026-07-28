@@ -131,6 +131,22 @@ header {
   width: 100%;
 }
 
+#searchSugestions {
+  position: absolute;
+  list-style: none;
+  top: 100%;
+  padding: 0;
+  margin: 0;
+  left: 0px;
+  right: 0;
+}
+
+#searchSugestions > li {
+  padding-left: 35px;
+  background-color: #f9f9f9;
+  display: block;
+}
+
 /* Main content */
 
 main {

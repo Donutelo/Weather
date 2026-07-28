@@ -1,5 +1,4 @@
 import "./style.css";
-import debounce from "lodash.debounce";
 
 const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
 const Today = new Date().toISOString().split("T"[0]);
@@ -50,18 +49,37 @@ searchInput.addEventListener("input", (e) => {
   clearTimeout(timeoutId);
 
   const term = e.target.value.toLowerCase();
-  timoutId = setTimeout(async () => {
+  timeoutId = setTimeout(async () => {
     if (term.length > 2) {
       try {
-        const data = await fetch(`/api/noimnation?q=${term}`).then((r) =>
+        const data = await fetch(`/api/nomination?q=${term}`).then((r) =>
           r.json(),
         );
-        const itens = await data
-          .map((place) => `<li>${place.name}</li>`)
+
+        if (!Array.isArray(data)) {
+          throw new Error("Resposta não é uma array");
+        }
+
+        const shortNames = data
+          .map((place) => ({
+            id: place.place_id,
+            name: place.display_name.split(",").slice(0, 4).join(","),
+          }))
+          .filter((item, index, self) => {
+            return index === self.findIndex((i) => i.name === item.name)
+          })
+          .slice(0, 3);
+
+        const itens = shortNames
+          .map((item) => `<li>${item.name}</li>`)
           .join("");
+
+        list.innerHTML = itens;
       } catch (error) {
         console.error("Erro na busca:", error);
       }
+    } else {
+      list.innerHTML = "";
     }
   }, 500);
 });

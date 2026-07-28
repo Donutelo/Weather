@@ -18,7 +18,7 @@ app.get("/api/nomination", async (req, res) => {
   try {
     const { q } = req.query;
     const response = await axios.get(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json`,
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&dedupe=1&limit=30&extratags=1&addressdetails=1`,
       {
         headers: {
           "User-Agent": "Weather/1.0 gustavobm2049@hotmail.com",
