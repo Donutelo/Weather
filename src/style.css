@@ -145,6 +145,7 @@ header {
   padding-left: 35px;
   background-color: #f9f9f9;
   display: block;
+  cursor: pointer;
 }
 
 /* Main content */

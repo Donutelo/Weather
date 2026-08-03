@@ -1,11 +1,23 @@
 import "./style.css";
 
 const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
-const Today = new Date().toISOString().split("T"[0]);
+const today = new Date().toISOString().split("T")[0];
+
+const iconMap = {
+  "snow": "wi-snowflake-cold",
+  "rain": "wi-raindrops",
+  "fog": "wi-fog",
+  "wind": "wi-strong-wind",
+  "cloudy": "wi-cloudy",
+  "partly-cloudy-day": "wi-day-cloudy",
+  "partily-cloudy-night": "wi-night-cloudy",
+  "clear-day": "wi-day-sunny",
+  "clear-night": "wi-night-cloudy",
+}
 
 /* Main things */
 
-const WeatherIcon = document.querySelector(".weather-icon-wrapper > svg");
+const weatherIcon = document.querySelector(".weather-icon-wrapper > svg");
 
 /* Search things */
 
@@ -13,37 +25,27 @@ const searchInput = document.getElementById("searchInput");
 const list = document.getElementById("searchSugestions");
 let timeoutId;
 
-async function GetWeatherInfo(
+async function getWeatherInfo({
   location = "Santo André",
-  date1 = Today,
+  date1 = today,
   date2 = "",
   unitGroup = "metric",
   lang = "pt",
-) {
+} = {}) {
   try {
     const answer = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/${date1}${date2 ? "/" + date2 : ""}?key=${APIKEY}&unitGroup=${unitGroup}&lang=${lang}`,
-    ).then((r) => r.json());
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/${date1}${date2 ? "/" + date2 : ""}?key=${APIKEY}&unitGroup=${unitGroup}&lang=${lang}&include=days&elements=humidity,windspeed,feelslike,icon&iconSet=icons1`,
+    );
+
+    const data = await answer.json();
+    const text = JSON.stringify(data);
+
     return data;
   } catch (error) {
     console.error("Erro:", error.message);
     return null;
   }
 }
-
-/*
-searchInput.addEventListener('input', async () => {
-  try {
-  const term = searchInput.value.toLowerCase();
-  const data = await fetch(`/api/nomination?q=${encodeURIComponent(term)}`).then(r => r.json());
-  /*const text = await data.text();'/
-  const itens = data.map(place => `<li>${place.name}</li>`).join('');
-  list.innerHTML = itens;
-  } catch (error) {
-    console.error('Erro:', error.message);
-  }
-})
-*/
 
 searchInput.addEventListener("input", (e) => {
   clearTimeout(timeoutId);
@@ -66,7 +68,7 @@ searchInput.addEventListener("input", (e) => {
             name: place.display_name.split(",").slice(0, 4).join(","),
           }))
           .filter((item, index, self) => {
-            return index === self.findIndex((i) => i.name === item.name)
+            return index === self.findIndex((i) => i.name === item.name);
           })
           .slice(0, 3);
 
@@ -75,6 +77,34 @@ searchInput.addEventListener("input", (e) => {
           .join("");
 
         list.innerHTML = itens;
+
+        list.querySelectorAll("li").forEach((item) => {
+          item.addEventListener("click", async (e) => {
+            const itemInfo = e.target.innerText;
+            const weatherInfo = await getWeatherInfo({ location: itemInfo });
+
+            const iconModule = await import(`/workspaces/Weather/src/icons/${iconMap[weatherInfo.days[0].icon]}.svg`);
+            const svgString = iconModule.default;
+
+            if (svgString.startsWith('http')) {
+              const response = await fetch(svgString);
+              const text = await response.text();
+              weatherIcon.innerHTML = text;
+            } else {
+              weatherIcon.innerHTML = svgString;
+            }
+
+            const svgChild = weatherIcon.querySelector("svg");
+
+            for (const attr of weatherIcon.attributes) {
+              svgChild.setAttribute(attr.name, attr.value);
+            };
+
+            weatherIcon.parentNode.replaceChild(svgChild, weatherIcon);
+
+            list.innerHTML = '';
+          });
+        });
       } catch (error) {
         console.error("Erro na busca:", error);
       }
