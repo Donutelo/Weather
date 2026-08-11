@@ -1,23 +1,24 @@
-import "./style.css";
+import "./css/style.css";
+import { tightlyCropSvg } from "@svg-fns/layout";
 
 const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
 const today = new Date().toISOString().split("T")[0];
 
 const iconMap = {
-  "snow": "wi-snowflake-cold",
-  "rain": "wi-raindrops",
-  "fog": "wi-fog",
-  "wind": "wi-strong-wind",
-  "cloudy": "wi-cloudy",
+  snow: "wi-snowflake-cold",
+  rain: "wi-raindrops",
+  fog: "wi-fog",
+  wind: "wi-strong-wind",
+  cloudy: "wi-cloudy",
   "partly-cloudy-day": "wi-day-cloudy",
   "partily-cloudy-night": "wi-night-cloudy",
   "clear-day": "wi-day-sunny",
   "clear-night": "wi-night-cloudy",
-}
+};
 
 /* Main things */
 
-const weatherIcon = document.querySelector(".weather-icon-wrapper > svg");
+const weatherIcon = document.querySelector("#weatherIcon");
 
 /* Search things */
 
@@ -83,26 +84,17 @@ searchInput.addEventListener("input", (e) => {
             const itemInfo = e.target.innerText;
             const weatherInfo = await getWeatherInfo({ location: itemInfo });
 
-            const iconModule = await import(`/workspaces/Weather/src/icons/${iconMap[weatherInfo.days[0].icon]}.svg`);
-            const svgString = iconModule.default;
+            const iconName = iconMap[weatherInfo.days[0].icon];
+            const iconModule = await import(
+              `./icons/${iconName}.png`
+            );
+            const iconImage = iconModule.default;
+            const re = /^wi-(.*?)(?:\.png)?$/;
+            
+            weatherIcon.src = iconImage;
+            weatherIcon.alt = `${iconName.replace(re, '$1').replace(/-/g, ' ')}`;
 
-            if (svgString.startsWith('http')) {
-              const response = await fetch(svgString);
-              const text = await response.text();
-              weatherIcon.innerHTML = text;
-            } else {
-              weatherIcon.innerHTML = svgString;
-            }
-
-            const svgChild = weatherIcon.querySelector("svg");
-
-            for (const attr of weatherIcon.attributes) {
-              svgChild.setAttribute(attr.name, attr.value);
-            };
-
-            weatherIcon.parentNode.replaceChild(svgChild, weatherIcon);
-
-            list.innerHTML = '';
+            list.innerHTML = "";
           });
         });
       } catch (error) {
