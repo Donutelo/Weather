@@ -71,7 +71,7 @@ h6 {
 
 @font-face {
   font-family: "SplineSansMono";
-  src: url("../fonts/SplineSansMono-VariableFont_wght.ttf") format("truetype");
+  src: url("../font/SplineSansMono-VariableFont_wght.ttf") format("truetype");
 }
 
 body {
@@ -184,12 +184,13 @@ main {
 }
 
 .weather-card {
-  max-width: 70vw;
+  max-width: 55vw;
   padding-left: 10vw;
   margin-bottom: 5%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 13em;
   grid-template-rows: 2.5em 1fr;
+  width: 34em;
 }
 
 .weather-card > h3 {
@@ -200,20 +201,38 @@ main {
 .weather-icon-wrapper {
   grid-row: 2 / 3;
   grid-column: 1 / 2;
-}
-
-
-#weatherIcon {
-  width: 100%;
   height: 100%;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 6em;
 }
+
+
+/*#weatherIcon i{
+  font-size: 1em;
+}*/
 
 
 .weather-content {
   padding: 15% 0;
   grid-row: 2 / 3;
   grid-column: 2 / 3;
+}
+
+dl {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+dl > dd {
+  flex-basis: max-content;
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+dl > dt {
+  flex: 0 0 auto;
 }
 
 /*
@@ -240,3 +259,4 @@ main {
   white-space: nowrap;
   border: 0;
 }
+ 

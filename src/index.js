@@ -1,14 +1,15 @@
 import "./css/style.css";
+import "/workspaces/Weather/src/css/weather-icons.min.css"
 import { tightlyCropSvg } from "@svg-fns/layout";
 
 const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
 const today = new Date().toISOString().split("T")[0];
 
 const iconMap = {
-  snow: "wi-snowflake-cold",
-  rain: "wi-raindrops",
+  snow: "wi-snow",
+  rain: "wi-rain",
   fog: "wi-fog",
-  wind: "wi-strong-wind",
+  wind: "wi-windy",
   cloudy: "wi-cloudy",
   "partly-cloudy-day": "wi-day-cloudy",
   "partily-cloudy-night": "wi-night-cloudy",
@@ -19,6 +20,9 @@ const iconMap = {
 /* Main things */
 
 const weatherIcon = document.querySelector("#weatherIcon");
+const humidityDOM = document.querySelector("#humidity");
+const windSpeedDOM = document.querySelector("#windSpeed");
+const feelsLikeDOM = document.querySelector("#feelsLike");
 
 /* Search things */
 
@@ -84,15 +88,12 @@ searchInput.addEventListener("input", (e) => {
             const itemInfo = e.target.innerText;
             const weatherInfo = await getWeatherInfo({ location: itemInfo });
 
-            const iconName = iconMap[weatherInfo.days[0].icon];
-            const iconModule = await import(
-              `./icons/${iconName}.png`
-            );
-            const iconImage = iconModule.default;
-            const re = /^wi-(.*?)(?:\.png)?$/;
+            const classes = iconMap[weatherInfo.days[0].icon];
+            weatherIcon.className = `wi ${classes}`;
             
-            weatherIcon.src = iconImage;
-            weatherIcon.alt = `${iconName.replace(re, '$1').replace(/-/g, ' ')}`;
+            humidityDOM.innerText = `${weatherInfo.days[0].humidity}%`;
+            feelsLikeDOM.innerText = `${weatherInfo.days[0].feelslike}C°`;
+            windSpeedDOM.innerText = `${weatherInfo.days[0].windspeed}kph`;
 
             list.innerHTML = "";
           });
