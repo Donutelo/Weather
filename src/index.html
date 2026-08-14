@@ -51,21 +51,28 @@
               <!-- don't forget to put something (the place's name) in the aria-label -->
               <h3></h3>
               <div class="weather-icon-wrapper" role="img">
-                  <i id="weatherIcon" class=""></i>
-                  <!-- remenber to put something here -->
-                </svg>
+                <i id="weatherIcon" class=""></i>
+                <!-- remenber to put something here -->
               </div>
               <div class="weather-content">
+                <!--
                 <h3 class="city-name"></h3>
                 <p class="temperature"></p>
                 <p class="condition"></p>
+                -->
                 <dl class="weather-details">
-                  <dt>Humidity:</dt>
-                  <dd id="humidity"></dd>
-                  <dt>Wind:</dt>
-                  <dd id="windSpeed"></dd>
-                  <dt>Feels-like temp:</dt>
-                  <dd id="feelsLike"></dd>
+                  <div class="weather-row">
+                    <dt>Humidity:</dt>
+                    <dd id="humidity"></dd>
+                  </div>
+                  <div class="weather-row">
+                    <dt>Wind:</dt>
+                    <dd id="windSpeed"></dd>
+                  </div>
+                  <div class="weather-row">
+                    <dt>Feels-like temp:</dt>
+                    <dd id="feelsLike"></dd>
+                  </div>
                 </dl>
               </div>
             </article>

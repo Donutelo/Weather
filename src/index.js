@@ -23,6 +23,8 @@ const weatherIcon = document.querySelector("#weatherIcon");
 const humidityDOM = document.querySelector("#humidity");
 const windSpeedDOM = document.querySelector("#windSpeed");
 const feelsLikeDOM = document.querySelector("#feelsLike");
+const weatherCard = document.querySelector(".weather-card");
+const weatherCardTitle = weatherCard.querySelector("h3");
 
 /* Search things */
 
@@ -90,10 +92,13 @@ searchInput.addEventListener("input", (e) => {
 
             const classes = iconMap[weatherInfo.days[0].icon];
             weatherIcon.className = `wi ${classes}`;
-            
+            const place = itemInfo.split(',')[0].trim();
+            weatherCard.setAttribute('aria-label', `${place}`);
+            weatherCardTitle.innerText = `${place}`;
+
             humidityDOM.innerText = `${weatherInfo.days[0].humidity}%`;
-            feelsLikeDOM.innerText = `${weatherInfo.days[0].feelslike}C°`;
-            windSpeedDOM.innerText = `${weatherInfo.days[0].windspeed}kph`;
+            feelsLikeDOM.innerText = `${weatherInfo.days[0].feelslike}°C`;
+            windSpeedDOM.innerText = `${weatherInfo.days[0].windspeed}km/h`;
 
             list.innerHTML = "";
           });

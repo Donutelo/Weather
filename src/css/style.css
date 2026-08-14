@@ -194,8 +194,10 @@ main {
 }
 
 .weather-card > h3 {
-  place-self: center;
-  grid-column: 1 / 2;
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  align-self: center;
+  justify-self: start;
 }
 
 .weather-icon-wrapper {
@@ -208,12 +210,18 @@ main {
   font-size: 6em;
 }
 
+.weather-content {
+  align-self: center;
+  grid-row: 2 / 3;
+  grid-column: 2 / 3;
+}
+
 
 /*#weatherIcon i{
   font-size: 1em;
 }*/
 
-
+/*
 .weather-content {
   padding: 15% 0;
   grid-row: 2 / 3;
@@ -233,6 +241,30 @@ dl > dd {
 
 dl > dt {
   flex: 0 0 auto;
+}
+*/
+
+.weather-details {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.weather-row {
+  display: flex;
+  align-items: baseline;
+  width:100%;
+}
+
+.weather-row dt {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.weather-row dd {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 0 0 0.5rem;
 }
 
 /*
