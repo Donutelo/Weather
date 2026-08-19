@@ -167,7 +167,6 @@ main {
   min-height: 400px;
   margin: 10px auto;
   overflow-y: auto;
-  border: 1px solid black; /* This is just for development */
 }
 
 .results-grid {
@@ -191,6 +190,7 @@ main {
   grid-template-columns: 1fr 13em;
   grid-template-rows: 2.5em 1fr;
   width: 34em;
+  row-gap: 1rem;
 }
 
 .weather-card > h3 {
@@ -201,7 +201,7 @@ main {
 }
 
 .weather-icon-wrapper {
-  grid-row: 2 / 3;
+  grid-row: 1 / 3;
   grid-column: 1 / 2;
   height: 100%;
   display: flex;
@@ -215,34 +215,6 @@ main {
   grid-row: 2 / 3;
   grid-column: 2 / 3;
 }
-
-
-/*#weatherIcon i{
-  font-size: 1em;
-}*/
-
-/*
-.weather-content {
-  padding: 15% 0;
-  grid-row: 2 / 3;
-  grid-column: 2 / 3;
-}
-
-dl {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-dl > dd {
-  flex-basis: max-content;
-  flex-shrink: 0;
-  flex-grow: 1;
-}
-
-dl > dt {
-  flex: 0 0 auto;
-}
-*/
 
 .weather-details {
   display: flex;
@@ -278,6 +250,47 @@ dl > dt {
 }
 */
 
+/* Animation */
+
+.fade-in {
+  animation: appear 1s ease-out both;
+}
+
+.fade-out {
+  animation: disappear 0.3s ease-in both;
+}
+
+.api-element:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.api-element:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes disappear {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+
 /* Invisible, per se */
 
 .visually-hidden {
@@ -291,4 +304,3 @@ dl > dt {
   white-space: nowrap;
   border: 0;
 }
- 

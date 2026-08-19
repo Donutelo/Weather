@@ -1,5 +1,5 @@
 import "./css/style.css";
-import "/workspaces/Weather/src/css/weather-icons.min.css"
+import "/workspaces/Weather/src/css/weather-icons.min.css";
 import { tightlyCropSvg } from "@svg-fns/layout";
 
 const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
@@ -25,12 +25,15 @@ const windSpeedDOM = document.querySelector("#windSpeed");
 const feelsLikeDOM = document.querySelector("#feelsLike");
 const weatherCard = document.querySelector(".weather-card");
 const weatherCardTitle = weatherCard.querySelector("h3");
+let weatherCardInfo;
 
 /* Search things */
 
+const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const list = document.getElementById("searchSugestions");
 let timeoutId;
+let firstSearch = true;
 
 async function getWeatherInfo({
   location = "Santo André",
@@ -54,6 +57,10 @@ async function getWeatherInfo({
   }
 }
 
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+});
+
 searchInput.addEventListener("input", (e) => {
   clearTimeout(timeoutId);
 
@@ -61,9 +68,14 @@ searchInput.addEventListener("input", (e) => {
   timeoutId = setTimeout(async () => {
     if (term.length > 2) {
       try {
-        const data = await fetch(`/api/nomination?q=${term}`).then((r) =>
-          r.json(),
-        );
+        const response = await fetch(`/api/nomination?q=${term}`);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Erro HTTP: ${response.status}: ${errorText}`);
+        }
+
+        const data = await response.json();
 
         if (!Array.isArray(data)) {
           throw new Error("Resposta não é uma array");
@@ -84,23 +96,19 @@ searchInput.addEventListener("input", (e) => {
           .join("");
 
         list.innerHTML = itens;
-
         list.querySelectorAll("li").forEach((item) => {
           item.addEventListener("click", async (e) => {
-            const itemInfo = e.target.innerText;
-            const weatherInfo = await getWeatherInfo({ location: itemInfo });
+            weatherCardInfo = await getWeatherCardInfo(e.currentTarget);
 
-            const classes = iconMap[weatherInfo.days[0].icon];
-            weatherIcon.className = `wi ${classes}`;
-            const place = itemInfo.split(',')[0].trim();
-            weatherCard.setAttribute('aria-label', `${place}`);
-            weatherCardTitle.innerText = `${place}`;
-
-            humidityDOM.innerText = `${weatherInfo.days[0].humidity}%`;
-            feelsLikeDOM.innerText = `${weatherInfo.days[0].feelslike}°C`;
-            windSpeedDOM.innerText = `${weatherInfo.days[0].windspeed}km/h`;
-
-            list.innerHTML = "";
+            if (firstSearch) {
+              firstSearch = false;
+              addEntryAnimation(weatherCard);
+              weatherCard.classList.remove("visually-hidden");
+              updateWeatherCard(weatherCardInfo);
+            } else {
+              weatherCard.classList.remove("fade-in");
+              weatherCard.classList.add("fade-out");
+            }
           });
         });
       } catch (error) {
@@ -111,3 +119,54 @@ searchInput.addEventListener("input", (e) => {
     }
   }, 500);
 });
+
+weatherCard.addEventListener("animationend", (e) => {
+  console.log("Animação terminada:", e.animationName);
+
+  if (e.animationName !== "disappear") return;
+
+  updateWeatherCard(weatherCardInfo);
+
+  weatherCard.classList.remove("fade-out");
+
+  void weatherCard.offsetWidth;
+
+  addEntryAnimation(weatherCard);
+});
+
+function addEntryAnimation(e) {
+  ["api-element", "fade-in"].forEach((classe) => {
+    if (!e.classList.contains(`${classe}`)) {
+      e.classList.add(`${classe}`);
+    }
+  });
+}
+
+/*
+function restartAnimation(e) {
+  e.classList.remove("fade-out");
+  void e.offsetWidth;
+  e.classList.add("api-element");
+}
+*/
+
+async function getWeatherCardInfo(e) {
+  const itemInfo = e.innerText;
+  const weatherInfo = await getWeatherInfo({ location: itemInfo });
+  const classes = iconMap[weatherInfo.days[0].icon];
+  const place = itemInfo.split(",")[0].trim();
+
+  return { weatherInfo, classes, place };
+}
+
+function updateWeatherCard({ weatherInfo, classes, place }) {
+  weatherIcon.className = `wi ${classes}`;
+  weatherCard.setAttribute("aria-label", `${place}`);
+  weatherCardTitle.innerText = `${place}`;
+
+  humidityDOM.innerText = `${weatherInfo.days[0].humidity}%`;
+  feelsLikeDOM.innerText = `${weatherInfo.days[0].feelslike}°C`;
+  windSpeedDOM.innerText = `${weatherInfo.days[0].windspeed}km/h`;
+
+  list.innerHTML = "";
+}
