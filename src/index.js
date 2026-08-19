@@ -2,7 +2,8 @@ import "./css/style.css";
 import "/workspaces/Weather/src/css/weather-icons.min.css";
 import { tightlyCropSvg } from "@svg-fns/layout";
 
-const APIKEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
+const API_KEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
+const API_URL = "https://reimagined-orbit-v7vpx5q6gj53pqw5-3000.app.github.dev";
 const today = new Date().toISOString().split("T")[0];
 
 const iconMap = {
@@ -44,7 +45,7 @@ async function getWeatherInfo({
 } = {}) {
   try {
     const answer = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/${date1}${date2 ? "/" + date2 : ""}?key=${APIKEY}&unitGroup=${unitGroup}&lang=${lang}&include=days&elements=humidity,windspeed,feelslike,icon&iconSet=icons1`,
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/${date1}${date2 ? "/" + date2 : ""}?key=${API_KEY}&unitGroup=${unitGroup}&lang=${lang}&include=days&elements=humidity,windspeed,feelslike,icon&iconSet=icons1`,
     );
 
     const data = await answer.json();
@@ -68,7 +69,7 @@ searchInput.addEventListener("input", (e) => {
   timeoutId = setTimeout(async () => {
     if (term.length > 2) {
       try {
-        const response = await fetch(`/api/nomination?q=${term}`);
+        const response = await fetch(`${API_URL}/api/nomination?q=${encodeURIComponent(term)}`);
 
         if (!response.ok) {
           const errorText = await response.text();
