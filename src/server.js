@@ -43,6 +43,7 @@ app.get("/api/nomination", async (req, res) => {
           limit: 30,
           extratags: 1,
           addressdetails: 1,
+          "accept-language": "en",
         },
         headers: {
           "User-Agent": 'Weather/1.0 (https://donutelo.github.io; contato: gustavobm2049@hotmail.com)',
