@@ -3,7 +3,7 @@ import "./css/weather-icons.min.css";
 import { tightlyCropSvg } from "@svg-fns/layout";
 
 const API_KEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";
-const API_URL = "https://reimagined-orbit-v7vpx5q6gj53pqw5-3000.app.github.dev";
+const API_URL = "https://weather-jews.onrender.com";
 const today = new Date().toISOString().split("T")[0];
 
 const iconMap = {
@@ -65,9 +65,9 @@ searchForm.addEventListener("submit", (e) => {
 searchInput.addEventListener("input", (e) => {
   clearTimeout(timeoutId);
 
-  const term = e.target.value.toLowerCase();
+  const term = e.target.value.toLowerCase().trim();
   timeoutId = setTimeout(async () => {
-    if (term.length > 2) {
+    if (term.length > 3) {
       try {
         const response = await fetch(`${API_URL}/api/nomination?q=${encodeURIComponent(term)}`);
 
@@ -118,7 +118,7 @@ searchInput.addEventListener("input", (e) => {
     } else {
       list.innerHTML = "";
     }
-  }, 500);
+  }, 1000);
 });
 
 weatherCard.addEventListener("animationend", (e) => {

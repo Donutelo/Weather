@@ -63,14 +63,33 @@ app.get("/api/nomination", async (req, res) => {
           addressdetails: 1,
         },
         headers: {
-          "User-Agent": "Weather/1.0 gustavobm2049@hotmail.com",
+          "User-Agent": "Weather/1.0 (https://donutelo.github.io; contato: gustavobm2049@hotmail.com)'",
         },
+        timeout: 15000,
       },
     );
     res.json(response.data);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao consultar o serviço de geocodificação' });
+
+    console.error('Erro ao consultar o Nomination', {
+      message: error.message,
+      code: error.code,
+      status: error.response?.status,
+      data: error.response?.data,
+    } );
+
+    res.status(429).json({
+      error: 'O serviço de geocodificação está temporariamente limitando as requisições. Tente novamente em alguns instantes',
+    });
+
+    res.status(500).json({
+      error: 'Erro ao consultar o serviço de geocodificação',
+      detail: error.response?.data || error.message,
+    });
+
+    res.status(502).json({
+      error: 'O serviço de geocodificação não respondeu corretamente',
+    });
   }
 });
 
