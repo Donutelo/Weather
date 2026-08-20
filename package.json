@@ -28,7 +28,7 @@
     "build": "webpack --config webpack.prod.cjs",
     "dev:front": "WDS_SOCKET_PORT=443 webpack serve --open --config webpack.dev.cjs",
     "dev:back": "node src/server.js",
-    "dev": "concurrently \"npm run dev:front\" \"npm run dev:\"",
+    "dev": "concurrently \"npm run dev:front\" \"npm run dev:back\"",
     "start": "node src/server.js",
     "deploy": "npm run build && gh-pages -d dist",
     "lint": "eslint src/",
