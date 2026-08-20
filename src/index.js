@@ -44,10 +44,22 @@ async function getWeatherInfo({
   lang = "pt",
 } = {}) {
   try {
-    const answer = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/${date1}${date2 ? "/" + date2 : ""}?key=${API_KEY}&unitGroup=${unitGroup}&lang=${lang}&include=days&elements=humidity,windspeed,feelslike,icon&iconSet=icons1`,
-    );
+    const encodedLocation = encodeURIComponent(location);
 
+    const dateRange = date2 ? `${encodeURIComponent(date1)}/${encodeURIComponent(date2)}` : encodeURIComponent(date1);
+
+    const params = new URLSearchParams({
+      key: API_KEY,
+      unitGroup,
+      lang,
+      include: "days",
+      elements: "humidity,windspeed,feelslike,icon",
+      iconSet: "icons1",
+    })
+
+    const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/` + `${encodedLocation}/${dateRange}?${params}`;
+
+    const answer = await fetch(url);
     const data = await answer.json();
     const text = JSON.stringify(data);
 
