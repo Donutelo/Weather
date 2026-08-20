@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "concurrently": "^10.0.5",
     "css-loader": "^7.1.2",
     "eslint": "^9.39.2",
     "gh-pages": "^6.3.0",
@@ -24,9 +25,11 @@
     "url": "https://github.com/Donutelo/my_package.git"
   },
   "scripts": {
-    "start": "WDS_SOCKET_PORT=443 webpack serve --open --config webpack.dev.cjs",
     "build": "webpack --config webpack.prod.cjs",
-    "dev": "webpack serve --config webpack.dev.cjs",
+    "dev:front": "WDS_SOCKET_PORT=443 webpack serve --open --config webpack.dev.cjs",
+    "dev:back": "node src/server.js",
+    "dev": "concurrently \"npm run dev:front\" \"npm run dev:\"",
+    "start": "node src/server.js",
     "deploy": "npm run build && gh-pages -d dist",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"

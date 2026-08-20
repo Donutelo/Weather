@@ -1,5 +1,5 @@
 import "./css/style.css";
-import "/workspaces/Weather/src/css/weather-icons.min.css";
+import "./css/weather-icons.min.css";
 import { tightlyCropSvg } from "@svg-fns/layout";
 
 const API_KEY = "KWR59KAWZ4ND9TXTMNQS5KRQZ";

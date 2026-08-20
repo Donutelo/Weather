@@ -7,6 +7,7 @@ const app = express();
 const allowedOrigins = [
   'https://donutelo.github.io',
   'https://reimagined-orbit-v7vpx5q6gj53pqw5-8080.app.github.dev',
+  'https://reimagined-orbit-v7vpx5q6gj53pqw5-3000.app.github.dev',
   'http://localhost:8080',
   'https://localhost:3000',
 ]
@@ -23,12 +24,11 @@ app.use((req, res, next) => {
 });
 */
 
-/*
 app.use((req, res, next) => {
   console.log('Origin:', req.headers.origin);
   next();
 });
-*/
+
 
 app.use(cors({
   origin: (origin, callback) => {
