@@ -12,24 +12,6 @@ const allowedOrigins = [
   'https://localhost:3000',
 ]
 
-/*
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204); // Responde rapidamente à verificação CORS
-  }
-  next();
-});
-*/
-
-app.use((req, res, next) => {
-  console.log('Origin:', req.headers.origin);
-  next();
-});
-
-
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -63,12 +45,13 @@ app.get("/api/nomination", async (req, res) => {
           addressdetails: 1,
         },
         headers: {
-          "User-Agent": "Weather/1.0 (https://donutelo.github.io; contato: gustavobm2049@hotmail.com)'",
+          "User-Agent": 'Weather/1.0 (https://donutelo.github.io; contato: gustavobm2049@hotmail.com)',
         },
         timeout: 15000,
       },
     );
-    res.json(response.data);
+
+    return res.json(response.data);
   } catch (error) {
 
     console.error('Erro ao consultar o Nomination', {
@@ -78,16 +61,13 @@ app.get("/api/nomination", async (req, res) => {
       data: error.response?.data,
     } );
 
-    res.status(429).json({
+    if (error.response?.status === 429) {
+      return res.status(429).json({
       error: 'O serviço de geocodificação está temporariamente limitando as requisições. Tente novamente em alguns instantes',
     });
+    }
 
-    res.status(500).json({
-      error: 'Erro ao consultar o serviço de geocodificação',
-      detail: error.response?.data || error.message,
-    });
-
-    res.status(502).json({
+    return res.status(502).json({
       error: 'O serviço de geocodificação não respondeu corretamente',
     });
   }

@@ -118,11 +118,10 @@ searchInput.addEventListener("input", (e) => {
     } else {
       list.innerHTML = "";
     }
-  }, 1000);
+  }, 800);
 });
 
 weatherCard.addEventListener("animationend", (e) => {
-  console.log("Animação terminada:", e.animationName);
 
   if (e.animationName !== "disappear") return;
 
