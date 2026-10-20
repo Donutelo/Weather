@@ -28,8 +28,6 @@ Aplicação web de clima que permite pesquisar uma cidade e consultar suas condi
    git clone https://github.com/Donutelo/Weather.git
    cd Weather
 
-
-
 2. Instale as dependências:
 
     ```bash
